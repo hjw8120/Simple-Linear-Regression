@@ -3,7 +3,7 @@ HW 01 - Simple Linear Regression
 Your Name
 2019-09-11
 
-### Load packages
+### Load packages & Data
 
 ``` r
 library(tidyverse)
@@ -49,3 +49,12 @@ bikeshare <- read_csv("data/bikeshare.csv")
 ### Question 9
 
 (Add code and narrative as needed.)
+
+### Overall (Do not delete\!)
+
+You do not need to write anything for this question. We will check the
+following as part of your lab grade:
+
+  - 5 pt: Documents neatly organized (.Rmd and .md files)
+  - 3 pt: Narrative in full sentences and neatly organized
+  - 2 pt: Regular and informative commit messages

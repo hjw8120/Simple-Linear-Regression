@@ -1,0 +1,84 @@
+---
+title: "HW 01 - Simple Linear Regression"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning=FALSE, 
+                      message=FALSE)
+```
+
+### Load packages
+
+```{r load-packages, message=FALSE}
+library(tidyverse)
+library(readr)
+library(broom)
+library(knitr)
+```
+
+```{r load-data, message=FALSE}
+bikeshare <- read_csv("data/bikeshare.csv")
+```
+
+## Part 1: Computations & Concepts 
+
+### Question 1
+
+```{r}
+
+```
+
+### Question 2
+
+```{r model}
+
+```
+
+
+```{r output-model}
+
+```
+
+### Question 3
+
+(Type your response to Question 3 here. There is no code required.)
+
+
+### Question 4
+
+(Type your response to Question 4 here. There is no code required.)
+
+
+### Question 5
+
+(Type your response to Question 5 here. There is no code required.)
+
+
+### Question 6
+
+(Type your response to Question 6 here. There is no code required.)
+
+
+### Question 7
+
+(Type your response to Question 7 here. There is no code required.)
+
+
+### Question 8
+
+```{r r-square}
+
+```
+
+
+## Part 2: Data Analysis
+
+### Question 9
+
+(Add code and narrative as needed.)
+
+

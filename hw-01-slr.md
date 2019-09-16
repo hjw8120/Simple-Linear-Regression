@@ -24,25 +24,7 @@ bikeshare <- read_csv("data/bikeshare.csv")
 winter_data <- bikeshare %>%
   filter(season == 1) %>%
   mutate(temp_c = temp *41)
-winter_data
 ```
-
-    ## # A tibble: 181 x 17
-    ##    instant dteday     season    yr  mnth holiday weekday workingday
-    ##      <dbl> <date>      <dbl> <dbl> <dbl>   <dbl>   <dbl>      <dbl>
-    ##  1       1 2011-01-01      1     0     1       0       6          0
-    ##  2       2 2011-01-02      1     0     1       0       0          0
-    ##  3       3 2011-01-03      1     0     1       0       1          1
-    ##  4       4 2011-01-04      1     0     1       0       2          1
-    ##  5       5 2011-01-05      1     0     1       0       3          1
-    ##  6       6 2011-01-06      1     0     1       0       4          1
-    ##  7       7 2011-01-07      1     0     1       0       5          1
-    ##  8       8 2011-01-08      1     0     1       0       6          0
-    ##  9       9 2011-01-09      1     0     1       0       0          0
-    ## 10      10 2011-01-10      1     0     1       0       1          1
-    ## # … with 171 more rows, and 9 more variables: weathersit <dbl>,
-    ## #   temp <dbl>, atemp <dbl>, hum <dbl>, windspeed <dbl>, casual <dbl>,
-    ## #   registered <dbl>, count <dbl>, temp_c <dbl>
 
 ### Question 2
 
@@ -110,7 +92,65 @@ variation in number of bikes rented in the winter.
 
 ### Question 9
 
-(Add code and narrative as needed.)
+First, filter bikeshare data so summer is the only season included. Then
+create variable `temp_c`, calculated by temp \* 41.
+
+``` r
+summer_data <- bikeshare %>%
+  filter(season == 3) %>%
+  mutate(temp_c = temp *41)
+```
+
+Fit a regression model to predict the number of bike rentals based on
+the temperature during the summer season.
+
+``` r
+summer_model <- lm(count ~ temp_c, data = summer_data)
+tidy(summer_model, conf.int = TRUE, level = 0.95) %>%
+     kable(digits = 3)
+```
+
+| term        | estimate | std.error | statistic | p.value | conf.low | conf.high |
+| :---------- | -------: | --------: | --------: | ------: | -------: | --------: |
+| (Intercept) | 6121.927 |  1071.854 |     5.712 |   0.000 | 4007.373 |  8236.480 |
+| temp\_c     | \-16.493 |    36.829 |   \-0.448 |   0.655 | \-89.150 |    56.164 |
+
+count = 6121.927 - 16.493 \* temp\_c
+
+Created a scatterplot to visualize the relationship between temperature
+and bike rental count in the
+summer.
+
+``` r
+ggplot(data = summer_data, mapping = aes(x = temp_c, y = count)) + geom_point() + labs(title = "Relationship between Temperature and Bike Rental Count", subtitle = "Summer", x = "Temperature (in C)", y = "Count")
+```
+
+![](hw-01-slr_files/figure-gfm/scatterplot-1.png)<!-- -->
+
+Created a residual plot to visualize the relationship between residuals
+of bike rental count and temperature in the summer.
+
+``` r
+summer_data <- summer_data %>%
+  mutate(resid = residuals(summer_model))
+```
+
+``` r
+ggplot(data = summer_data, mapping = aes(x = temp_c, y = resid)) + geom_point() + labs(title = "Residual Plot of Bike Rental Count vs. Temperature", subtitle = "Summer", x = "Temperature (in C)", y = "Residual") + geom_hline(yintercept = 0, color ="red")
+```
+
+![](hw-01-slr_files/figure-gfm/resid-plot-1.png)<!-- -->
+
+Created a histogram to visualize the distribution of residuals of bike
+rental count in the
+summer.
+
+``` r
+ggplot(data = summer_data, mapping = aes(x = resid)) + geom_histogram() + labs(title = "Distribution of Residuals", x = "Residual", y = "Count")
+```
+
+![](hw-01-slr_files/figure-gfm/resid-hist-1.png)<!-- --> Linearity
+Normality Constant Variance Independence
 
 ### Overall (Do not delete\!)
 

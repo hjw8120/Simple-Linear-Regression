@@ -62,20 +62,19 @@ Based on the 95% confidence interval, there is a statistically significant linea
 
 ### Question 6
 
-The test statistic is 12.049.EXPLAIN MEANING
-
+The test statistic is 12.049, indicating a p-value of 0.00. This means that assuming the null hypothesis were true, there is a 0% chance of getting a test statistic of 12.049.
 
 ### Question 7
 
-(Type your response to Question 7 here. There is no code required.)
+No, my roommate is not correct. The p-value of 0 means that assuming the null hypothesis were true, there is a 0% chance we would have gotten the results as extreme or more extreme than the output we got. Therefore, we can reject the null hypothesis that there is no linear relationship between temperature and bike rental count in the winter, in favor of the alternative hypothesis that there is a linear relationship between temperature and bike rental count in the winter.
 
 
 ### Question 8
 
 ```{r r-square}
-
+glance(winter_model, winter_data)$r.squared
 ```
-
+The R-squared value shows that temperature explains 44.78% of the variation in number of bikes rented in the winter.
 
 ## Part 2: Data Analysis
 

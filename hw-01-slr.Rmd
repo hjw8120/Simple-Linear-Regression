@@ -97,11 +97,22 @@ tidy(summer_model, conf.int = TRUE, level = 0.95) %>%
 
 count = 6121.927 - 16.493 * temp_c
 
+The null hypothesis is that the slope between bike rental count and temperature is 0 (there is no statistically significant linear relationship). The alternative hypothesis is the slope between bike rental count and temperature is not 0 (there is a statistically significant linear relationship).
+
+H0: β1 = 0
+Ha: β1 ≠ 0
+
+The 95% confidence interval shows that we are 95% confident that the true slope between temperature and bike rental count in the summer is between -89.150 and 56.164.
+
+The p-value of 0.655 is greater than alpha = 0.05, so we fail to reject the null hypothesis. Thus, there is not a statistically significant linear relationship between bike rental count and temperature in the summer. This is also supported by the 95% CI because slope 0 falls within the 95% confidence interval.
+
 Created a scatterplot to visualize the relationship between temperature and bike rental count in the summer.
 
 ```{r scatterplot}
-ggplot(data = summer_data, mapping = aes(x = temp_c, y = count)) + geom_point() + labs(title = "Relationship between Temperature and Bike Rental Count", subtitle = "Summer", x = "Temperature (in C)", y = "Count")
+ggplot(data = summer_data, mapping = aes(x = temp_c, y = count)) + geom_point() + labs(title = "Relationship between Temperature and Bike Rental Count in Summer", x = "Temperature (in C)", y = "Count")
 ```
+
+There seems to be no linear relationship between bike rental count and temperature in the summer.
 
 Created a residual plot to visualize the relationship between residuals of bike rental count and temperature in the summer.
 
@@ -111,7 +122,7 @@ summer_data <- summer_data %>%
 ```
 
 ```{r resid-plot}
-ggplot(data = summer_data, mapping = aes(x = temp_c, y = resid)) + geom_point() + labs(title = "Residual Plot of Bike Rental Count vs. Temperature", subtitle = "Summer", x = "Temperature (in C)", y = "Residual") + geom_hline(yintercept = 0, color ="red")
+ggplot(data = summer_data, mapping = aes(x = temp_c, y = resid)) + geom_point() + labs(title = "Residual Plot of Bike Rental Count vs. Temperature in Summer", x = "Temperature (in C)", y = "Residual") + geom_hline(yintercept = 0, color ="red")
 ```
 
 Created a histogram to visualize the distribution of residuals of bike rental count in the summer.
@@ -123,6 +134,18 @@ Linearity
 Normality
 Constant Variance
 Independence
+
+```{r predict-mean}
+x0 <- data.frame(temp_c = c(30))
+predict.lm(summer_model, x0, interval = "confidence",
+           conf.level = 0.95)
+```
+
+The predicted average number of bike rentals for days in the summer that are 30 degrees Celsius is 5627 bikes. We are 95% confident that the true mean bike count for 30 degree Celsius summer days is between 5403 and 5851 bikes.
+
+count = 6121.927 - 16.493 * 30 = 5627.137
+
+Using the regression model, if it is 30 degrees Celsius on a single day in June, we predict there will be 5627 bike rentals.
 
 ### Overall (Do not delete!)
 

@@ -114,7 +114,7 @@ ggplot(data = summer_data, mapping = aes(x = temp_c, y = count)) + geom_point() 
 #### Fitting a Regression Model:
 
 Fit a regression model to predict the number of bike rentals based on
-the temperature during the summer season.
+the temperature during the summer.
 
 ``` r
 summer_model <- lm(count ~ temp_c, data = summer_data)

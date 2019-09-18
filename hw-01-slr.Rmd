@@ -46,18 +46,15 @@ count = -111.038 + 222.416 * temp_c
 
 ### Question 3
 
-We are 95% confident that the true slope of the linear relationship between number of bike rentals in the winter and temperature is between 185.990 and 248.841.
-
+We are 95% confident that the true slope of the linear relationship between temperature (in C) and number of bike rentals in the winter is between 185.990 and 248.841.
 
 ### Question 4
 
 The width of a 90% confidence interval would be smaller than the width of the 95% confidence interval because we are now less confident that the CI captures the true slope, thus giving us a narrower range of numbers.
 
-
 ### Question 5
 
 Based on the 95% confidence interval, there is a statistically significant linear relationship between temperature and number of bike rentals in the winter because the 95% confidence interval does not include a slope of 0 (no linear relationship).
-
 
 ### Question 6
 
@@ -66,7 +63,6 @@ The test statistic is 12.049, indicating a p-value of 0.00. This means that assu
 ### Question 7
 
 No, my roommate is not correct. The p-value of 0 means that assuming the null hypothesis were true, there is a 0% chance we would have gotten the results as extreme or more extreme than the output we got. Therefore, we can reject the null hypothesis that there is no linear relationship between temperature and bike rental count in the winter, in favor of the alternative hypothesis that there is a linear relationship between temperature and bike rental count in the winter.
-
 
 ### Question 8
 
@@ -79,13 +75,21 @@ The R-squared value shows that temperature explains 44.78% of the variation in n
 
 ### Question 9
 
-First, filter bikeshare data so summer is the only season included. Then create variable `temp_c`, calculated by temp * 41.
+First, filter `bikeshare` data so summer is the only season included. Then create variable `temp_c`, calculated by temp * 41.
 
 ```{r summer-only}
 summer_data <- bikeshare %>%
   filter(season == 3) %>%
   mutate(temp_c = temp *41)
 ```
+
+Created a scatterplot to visualize the relationship between temperature and bike rental count in the summer.
+
+```{r scatterplot}
+ggplot(data = summer_data, mapping = aes(x = temp_c, y = count)) + geom_point() + labs(title = "Relationship between Temperature and Bike Rental Count in Summer", x = "Temperature (in C)", y = "Number of Bike Rentals")
+```
+
+#### Fitting a Regression Model:
 
 Fit a regression model to predict the number of bike rentals based on the temperature during the summer season.
 
@@ -97,22 +101,15 @@ tidy(summer_model, conf.int = TRUE, level = 0.95) %>%
 
 count = 6121.927 - 16.493 * temp_c
 
-The null hypothesis is that the slope between bike rental count and temperature is 0 (there is no statistically significant linear relationship). The alternative hypothesis is the slope between bike rental count and temperature is not 0 (there is a statistically significant linear relationship).
+#### Checking Assumptions:
 
-H0: β1 = 0
-Ha: β1 ≠ 0
+Linearity is not satisfied because the scatterplot depicting the relationship between temperature and bike rentals in the summer does follow a straight line.
 
-The 95% confidence interval shows that we are 95% confident that the true slope between temperature and bike rental count in the summer is between -89.150 and 56.164.
+Normality is not satisfied because the histogram of residuals does not show a normal distribution. The distribution of residuals is bimodal with a slight right skew. Also, the Normal QQ Plot of Residuals does not follow the line of best fit.
 
-The p-value of 0.655 is greater than alpha = 0.05, so we fail to reject the null hypothesis. Thus, there is not a statistically significant linear relationship between bike rental count and temperature in the summer. This is also supported by the 95% CI because slope 0 falls within the 95% confidence interval.
+Constant Variance is not satisfied because the regression variance is not constant for all temperatures. In the residual scatterplot, residual variance is higher for lower temperatures, but shows lower variance (more clustered around 0) for temperatures around 25 to 35 degrees(C).
 
-Created a scatterplot to visualize the relationship between temperature and bike rental count in the summer.
-
-```{r scatterplot}
-ggplot(data = summer_data, mapping = aes(x = temp_c, y = count)) + geom_point() + labs(title = "Relationship between Temperature and Bike Rental Count in Summer", x = "Temperature (in C)", y = "Count")
-```
-
-There seems to be no linear relationship between bike rental count and temperature in the summer.
+Independence is not satisfied because bike rental counts each day are not independent of each other. Other factors beyond temperature impact bike rental counts. For example, bike rentals will be more popular during holidays or seasons when there are more tourists, or if the bike shop gets more publicity, people will tend to rent bikes from there more.
 
 Created a residual plot to visualize the relationship between residuals of bike rental count and temperature in the summer.
 
@@ -130,10 +127,33 @@ Created a histogram to visualize the distribution of residuals of bike rental co
 ```{r resid-hist}
 ggplot(data = summer_data, mapping = aes(x = resid)) + geom_histogram() + labs(title = "Distribution of Residuals", x = "Residual", y = "Count")
 ```
-Linearity
-Normality
-Constant Variance
-Independence
+
+Created a Normal QQ Plot of Residuals.
+
+```{r resid-qqplot}
+ggplot(data = summer_data, mapping = aes(sample = resid)) + 
+  stat_qq() + 
+  stat_qq_line() +
+  labs(title = "Normal QQ Plot of Residuals")
+```
+
+#### Statistical Inference: 
+
+The null hypothesis is that the slope between bike rental count and temperature is 0 (there is no statistically significant linear relationship). The alternative hypothesis is the slope between bike rental count and temperature is not 0 (there is a statistically significant linear relationship).
+
+H0: β1 = 0
+Ha: β1 ≠ 0
+
+The 95% confidence interval shows that we are 95% confident that the true slope between temperature and bike rental count in the summer is between -89.150 and 56.164.
+
+The p-value of 0.655 is greater than alpha = 0.05, so we fail to reject the null hypothesis. Thus, there is not a statistically significant linear relationship between bike rental count and temperature in the summer. This is also supported by the 95% CI because slope 0 falls within the 95% confidence interval.
+
+```{r r-square-summer}
+glance(summer_model, summer_data)$r.squared
+```
+The R-squared value shows that temperature explains 0.108% of the variation in number of bikes rented in the summer.
+
+#### Predictions:
 
 ```{r predict-mean}
 x0 <- data.frame(temp_c = c(30))
